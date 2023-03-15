@@ -1,0 +1,17 @@
+  416  sudo pip3 install virtualenv
+  417  sudo pip3 install virtualenv -i https://pypi.doubanio.com/simple/~/.pip
+  418  sudo pip3 install virtualenv -i https://pypi.doubanio.com/simple/
+  419  sudo pip3 install virtualenvwrapper
+  420  mkdir ~/.virtualenv
+  421  sudo vim ~/.bashrc
+  422  sudo find / -name virtualenvwrapper.sh
+  423  sudo vim ~/.bashrc
+  424  source ~/.bashrc
+  425  mkvirtualenv my_env
+  426  workon my_env
+  427  deactivate
+  428  history
+  429  history | history0314.txt
+  430  history > history0314.txt
+
+  https://blog.csdn.net/qq_36691432/article/details/106279453
