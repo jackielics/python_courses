@@ -19,12 +19,27 @@ def my_render(request, template_path, context_dict={}):
     return HttpResponse(res_html)
 
 
+EXCLUDE_IPS = ['127.0.0.1']
+def blocked_ips(view_func):
+    def wrapper(request, *view_args, **view_kwargs):
+        # 获取浏览器端的ip地址
+        user_ip = request.META['REMOTE_ADDR']
+        if user_ip in EXCLUDE_IPS:
+            return HttpResponse('<h1>Forbidden</h1>')
+        else:
+            return view_func(request, *view_args, **view_kwargs)
+    return wrapper
+
+# @blocked_ips
 def index(request):
     # return HttpResponse('Hello Django')
     # return my_render(request,'index.html')
     # 例：查询所有图书的数目。
     # a=1+'a'
-    print(BookInfo.objects.all().aggregate(Count('id')))
+    # print(BookInfo.objects.all().aggregate(Count('id')))
+    # user_ip = request.META['REMOTE_ADDR']
+    # if user_ip in EXCLUDE_IPS:
+    #     return HttpResponse('<h1>Forbidden</h1>')
     return render(request, 'index.html', {'content': 'hello Django!!!'})
 
 
@@ -61,7 +76,6 @@ def delete(request, bid):
     book = BookInfo.objects.get(id=bid)
     # 2.删除对应书籍
     book.delete()
-    # 3.重定向，让浏览器访问/show_books
     return HttpResponseRedirect('/show_books')
 
 
@@ -172,8 +186,8 @@ from datetime import datetime, timedelta
 # /set_cookie
 def set_cookie(request):
     '''设置cookie信息'''
-    response = HttpResponse('设置cookie') # 创建一个HttpResponse对象，用于响应，响应内容为“设置cookie”
-    # cookie名为num, 值为2，过期时间为14天
+    response = HttpResponse('设置cookie')
+    # 设置一个cookie信息,名字为num, 值为2
     response.set_cookie('num', 2, max_age=14 * 24 * 3600)
     # 返回reponse
     return response
@@ -182,15 +196,14 @@ def set_cookie(request):
 # 获取cookie
 def get_cookie(request):
     '''获取cookie的信息'''
-    num = request.COOKIES['num'] # 获取名字为num的cookie的值
+    num = request.COOKIES['num']
     print(type(num))
-    return HttpResponse(num) # 返回响应内容为num的值
+    return HttpResponse(num)
 
 
 # /set_session
 def set_session(request):
-    '''设置session，将session信息保存到服务器'''
-    # session信息是字典类型
+    '''设置session'''
     request.session['username'] = 'admin'
     request.session['age'] = 18
     # request.session.set_expiry(5)
@@ -208,8 +221,8 @@ def get_session(request):
 # 　/clear_session
 def clear_session(request):
     '''清除session信息'''
-    # request.session.clear()  # 只是删除session_data
-    request.session.flush() # 删除session_data和session_key
+    # request.session.clear()  #只是删除session_data
+    request.session.flush()
     return HttpResponse('清除成功')
 
 
@@ -218,11 +231,10 @@ def test_var(request):
     '''模板变量'''
     my_dict = {'title': '字典键值'}
     my_list = [1, 2, 3]
-    book = BookInfo.objects.get(id=1) # 获取id为1的图书
+    book = BookInfo.objects.get(id=1)
     # 定义模板上下文
     context = {'my_dict': my_dict, 'my_list': my_list, 'book': book}
-    # 使用模板，返回响应，响应内容为test_var.html
-    return render(request, 'test_var.html', context) 
+    return render(request, 'test_var.html', context)
 
 
 def test_tags(request):
@@ -259,20 +271,19 @@ def change_pwd(request):
 def change_pwd_action(request):
     '''模拟修改密码处理'''
     # 1.获取新密码
-    if request.session.has_key('islogin'): 
-        # 判断用户是否登录
-        pwd = request.POST.get('pwd') # 获取新密码，这里的pwd是change_pwd.html中的name属性
+    if request.session.has_key('islogin'):
+        pwd = request.POST.get('pwd')
         # 2.返回一个应答
-        return HttpResponse('修改密码为:%s'%pwd)
+        return HttpResponse('修改密码为:%s' % pwd)
     else:
         return HttpResponse('未登录')
 
 
 from PIL import Image, ImageDraw, ImageFont
 
+
 # /verify_code
 def verify_code(request):
-    '''显示验证码图片'''
     # 引入随机函数模块
     import random
     # 定义变量，用于画面的背景色、宽、高 RGB
@@ -317,3 +328,38 @@ def verify_code(request):
     im.save(buf, 'png')
     # 将内存中的图片数据返回给客户端，MIME类型为图片png
     return HttpResponse(buf.getvalue(), 'image/png')
+
+
+def url_reverse(request):
+    return render(request, 'url_reverse.html')
+
+
+def show_args(request, a, b):
+    return HttpResponse(str(a) + ':' + str(b))
+
+
+def show_kwargs(request, c, d):
+    return HttpResponse(str(c) + ":" + str(d))
+
+
+from django.urls import reverse
+
+
+# /test_redirect
+def test_redirect(request):
+    # 重定向到/index
+    # return redirect('/index')
+    print('start redirect')
+    url = reverse('booktest:index')
+
+    # 重定向到/show_args/1/2
+    # url = reverse('booktest:show_args', args=(1,2))
+
+    # 重定向到/show_kwargs/3/4
+    # url = reverse('booktest:show_kwargs', kwargs = {'c': 3, 'd': 4})
+    return redirect(url)
+
+
+# 练习静态资源加载
+def static_test(request):
+    return render(request, 'static_test.html')

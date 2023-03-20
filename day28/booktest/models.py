@@ -2,13 +2,11 @@ from django.db import models
 
 
 # 继承模型管理器类，重写all方法，实现软删除
-# 软删除标记：删除数据时不做真正的删除，而是把标记数据设置为1 表示删除，目的是防止重要的数据丢失。
-class BookInfoManager(models.Manager): 
-    """ 继承模型管理器类，作用：操作模型类对应的数据表（增删改查） """
+class BookInfoManager(models.Manager):
     def all(self):
         # 1.调用父类的all方法，获取所有数据
         books = super().all()
-        # 2.对books中的数据进行过滤，把isDelete=False的数据取出来
+        # 2.对books中的数据进行过滤
         books_nodel = books.filter(isDelete=False)
         # 返回books
         return books_nodel
@@ -18,9 +16,8 @@ class BookInfoManager(models.Manager):
         # 1.创建一个图书对象
         # 获取self所在的模型类
         model_class = self.model
-        book = model_class() # model_class是BookInfo类
-        # book = BookInfo() # 也可以这样写
-        # 上面两种写法都是创建一个BookInfo类的对象
+        book = model_class()
+        # book = BookInfo()
         book.btitle = btitle
         book.bpub_date = bpub_date
         # 2.添加进数据库
@@ -28,17 +25,13 @@ class BookInfoManager(models.Manager):
         # 3.返回book
         return book
 
-# Create your models here. 
-class BookInfo(models.Model): 
-    """ models.Model是固定的，继承自模型类，作用：映射数据库表"""
-    # 图书名称，最大长度为20，索引
+# Create your models here.
+class BookInfo(models.Model):
     btitle = models.CharField(max_length=20, db_index=True)
     # 价格,最大位数为10,小数为2
     bprice = models.DecimalField(default=10, max_digits=10, decimal_places=2)
-
-    # DateField表示日期类型，auto_now表示每次修改数据时，自动更新时间
     bpub_date = models.DateField(auto_now=True)
-    # default=0表示默认值为0，null=True表示数据库可以为空，blank=True表示后台管理可以为空
+    # 阅读量,blank是控制后台管理的
     bread = models.IntegerField(default=0, null=True, blank=True)
     # 评论量
     bcomment = models.IntegerField(default=0)
@@ -58,8 +51,6 @@ class HeroInfo(models.Model):
     hname = models.CharField(max_length=20)
     hgender = models.BooleanField(default=False)
     hcomment = models.CharField(max_length=100)  # 拥有什么技能
-    # 关系属性，关联图书，on_delete=models.CASCADE表示级联删除，如果图书删除，英雄也删除
-    # db_constraint=False表示不创建外键约束
     hbook = models.ForeignKey('BookInfo', on_delete=models.CASCADE, db_constraint=False)
     # 删除标记
     isDelete = models.BooleanField(default=False)
@@ -116,3 +107,16 @@ class Areas(models.Model):
 
     def __str__(self):
         return self.atitle
+
+    def title(self):
+        return self.atitle
+
+    def parent(self):
+        if self.aParent is None:
+            return ''
+        return self.aParent.atitle
+    parent.short_description = '父级地区名称'
+
+class PicTest(models.Model):
+    '''上传图片'''
+    goods_pic = models.ImageField(upload_to='booktest')

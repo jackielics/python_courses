@@ -49,6 +49,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'booktest.middleware.TestMiddleware1',
+    'booktest.middleware.ExceptionTest1Middleware',
+    'booktest.middleware.ExceptionTest2Middleware'
 ]
 
 ROOT_URLCONF = 'day23_1.urls'
@@ -82,13 +85,11 @@ DATABASES = {
         # 'NAME': BASE_DIR / 'db.sqlite3',
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'test7',  # 使用的数据库的名字,数据库必须手动创建
-        'USER': 'jack',  # 链接mysql的用户名
+        'USER': 'root',  # 链接mysql的用户名
         'PASSWORD': '123',  # 用户对应的密码
-        'HOST': '192.168.157.130',  # 指定mysql数据库所在电脑ip
+        'HOST': '192.168.19.130',  # 指定mysql数据库所在电脑ip
         'PORT': 3306,  # mysql服务的端口号
     }
-
-
 }
 
 
@@ -128,7 +129,7 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/abc/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -136,3 +137,5 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #系统的静态资源文件就放在这个目录下
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] # 设置静态文件的保存目录
+#上传图片的默认路径
+MEDIA_ROOT=os.path.join(BASE_DIR,'static/media')

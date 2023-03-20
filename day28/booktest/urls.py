@@ -2,14 +2,12 @@
 # 2023年03月15日11时14分11秒
 from django.urls import path
 from .views import *
-# 将URL映射到相应的视图函数
-
 urlpatterns = [
-    path('index/',index),
+    path('index/',index,name='index'),
     path('index2/', index2),
     path('show_books/',show_books),
     path('books/<int:bid>',detail),
-    path('delete<int:bid>',delete), # URL模式：匹配类似于/delete/1/的URL
+    path('delete<int:bid>',delete),
     path('create/',create),
     path('areas/',areas),
     path('login/',login),
@@ -31,5 +29,10 @@ urlpatterns = [
     path('html_escape/',html_escape),
     path('change_pwd/',change_pwd),
     path('change_pwd_action/',change_pwd_action),
-    path('verify_code/',verify_code)
+    path('verify_code/',verify_code),
+    path('url_reverse/',url_reverse),
+    path('show_args/<int:a>/<int:b>', show_args, name='show_args'),
+    path('show_kwargs/<int:c>/<int:d>', show_kwargs, name='show_kwargs'),
+    path('test_redirect/',test_redirect),
+    path('static_test/',static_test)
 ]
