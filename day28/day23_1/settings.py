@@ -88,7 +88,7 @@ DATABASES = {
         'PORT': 3306,  # mysql服务的端口号
     }
 
-    
+
 }
 
 

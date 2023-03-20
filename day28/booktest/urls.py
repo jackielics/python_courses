@@ -2,12 +2,14 @@
 # 2023年03月15日11时14分11秒
 from django.urls import path
 from .views import *
+# 将URL映射到相应的视图函数
+
 urlpatterns = [
     path('index/',index),
     path('index2/', index2),
     path('show_books/',show_books),
     path('books/<int:bid>',detail),
-    path('delete<int:bid>',delete),
+    path('delete<int:bid>',delete), # URL模式：匹配类似于/delete/1/的URL
     path('create/',create),
     path('areas/',areas),
     path('login/',login),
