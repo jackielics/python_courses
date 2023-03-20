@@ -5,10 +5,12 @@ from django.utils.deprecation import MiddlewareMixin
 
 
 class BlockedIPSMiddleware(object):
+    '''中间件类，用于记录用户的ip地址'''
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
+        '''产生request对象之后，url匹配之前调用'''
         return self.get_response(request)
 
     '''中间件类'''
@@ -16,13 +18,14 @@ class BlockedIPSMiddleware(object):
 
     def process_view(self, request, view_func, *view_args, **view_kwargs):
         '''视图函数调用之前会调用'''
-        user_ip = request.META['REMOTE_ADDR']
+        user_ip = request.META['REMOTE_ADDR'] # 获取用户的ip地址
         if user_ip in BlockedIPSMiddleware.EXCLUDE_IPS:
+            # 如果用户的ip地址在禁止列表中，则返回Forbidden
             return HttpResponse('<h1>Forbidden</h1>')
 
 
 class TestMiddleware(object):
-    '''中间件类'''
+    '''中间件类，'''
 
     def __init__(self, get_response):
         print('---init---')
@@ -49,6 +52,7 @@ class TestMiddleware(object):
 
 
 class TestMiddleware1(MiddlewareMixin):
+    '''中间件类'''
     def process_request(self, request):
         print('----process_request----')
         # return HttpResponse('ok')
@@ -58,6 +62,7 @@ class TestMiddleware1(MiddlewareMixin):
         print('----process_view----')
 
     def process_response(self, request, response: HttpResponse):
+        '''视图函数调用之后，内容返回浏览器之前'''
         print('------process_response------')
         response.set_cookie('today', 20)
         return response

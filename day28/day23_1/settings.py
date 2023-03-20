@@ -85,9 +85,9 @@ DATABASES = {
         # 'NAME': BASE_DIR / 'db.sqlite3',
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'test7',  # 使用的数据库的名字,数据库必须手动创建
-        'USER': 'root',  # 链接mysql的用户名
+        'USER': 'jack',  # 链接mysql的用户名
         'PASSWORD': '123',  # 用户对应的密码
-        'HOST': '192.168.19.130',  # 指定mysql数据库所在电脑ip
+        'HOST': '192.168.157.130',  # 指定mysql数据库所在电脑ip
         'PORT': 3306,  # mysql服务的端口号
     }
 }

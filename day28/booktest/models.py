@@ -17,7 +17,8 @@ class BookInfoManager(models.Manager):
         # 获取self所在的模型类
         model_class = self.model
         book = model_class()
-        # book = BookInfo()
+        # 也可以像下面这样写，但是不推荐，因为如果模型类名字改了，这里就要改
+        # book = BookInfo() 
         book.btitle = btitle
         book.bpub_date = bpub_date
         # 2.添加进数据库
@@ -26,12 +27,15 @@ class BookInfoManager(models.Manager):
         return book
 
 # Create your models here.
-class BookInfo(models.Model):
+class BookInfo(models.Model): 
+    """ 模型类，继承models.Model作用：
+        1.告诉Django这是一个模型类 
+        2.创建一个模型类对应的数据库表 """
     btitle = models.CharField(max_length=20, db_index=True)
     # 价格,最大位数为10,小数为2
     bprice = models.DecimalField(default=10, max_digits=10, decimal_places=2)
     bpub_date = models.DateField(auto_now=True)
-    # 阅读量,blank是控制后台管理的
+    # 阅读量，blank是控制后台管理的
     bread = models.IntegerField(default=0, null=True, blank=True)
     # 评论量
     bcomment = models.IntegerField(default=0)
@@ -41,9 +45,11 @@ class BookInfo(models.Model):
     objects = BookInfoManager()
 
     def __str__(self):
+        '''定义每个数据对象的显示信息，显示在管理页面'''
         return self.btitle
 
     class Meta:
+        """ 指定模型类对应的数据表名 """
         db_table = 'bookinfo'
 
 # 英雄模型类，关联BookInfo模型类
@@ -51,7 +57,7 @@ class HeroInfo(models.Model):
     hname = models.CharField(max_length=20)
     hgender = models.BooleanField(default=False)
     hcomment = models.CharField(max_length=100)  # 拥有什么技能
-    hbook = models.ForeignKey('BookInfo', on_delete=models.CASCADE, db_constraint=False)
+    hbook = models.ForeignKey('BookInfo', on_delete=models.CASCADE, db_constraint=False) # 关联图书，级联删除，不创建外键约束
     # 删除标记
     isDelete = models.BooleanField(default=False)
 
@@ -109,14 +115,16 @@ class Areas(models.Model):
         return self.atitle
 
     def title(self):
+        '''返回当前地区的名称'''
         return self.atitle
 
     def parent(self):
+        '''返回当前地区的父级地区名称'''
         if self.aParent is None:
             return ''
         return self.aParent.atitle
-    parent.short_description = '父级地区名称'
+    parent.short_description = '父级地区名称' # 设置admin中显示的列名
 
 class PicTest(models.Model):
     '''上传图片'''
-    goods_pic = models.ImageField(upload_to='booktest')
+    goods_pic = models.ImageField(upload_to='booktest') # upload_to指定图片上传的途径

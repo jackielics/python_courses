@@ -13,4 +13,4 @@ from django.core.asgi import get_asgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'day23_1.settings')
 
-application = get_asgi_application()
+application = get_asgi_application() # application is a callable object
