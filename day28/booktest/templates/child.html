@@ -1,0 +1,12 @@
+{#继承的父模板的路径#}
+{% extends 'base.html' %}
+{% block title %}子模板文件{% endblock title %}
+{% block b1 %}
+    {{ block.super }}
+    <h1>这是子模板b1块中的内容</h1>
+{% endblock b1 %}
+
+{% block b2 %}
+    <h1>这是子模板b2块中的内容</h1>
+    {{ block.super }}
+{% endblock b2 %}
