@@ -2,6 +2,7 @@
 # 2023年03月15日11时14分11秒
 from django.urls import path
 from .views import *
+# path使用正则表达式匹配url
 urlpatterns = [
     path('index/',index,name='index'),
     path('index2/', index2),

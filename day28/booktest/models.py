@@ -57,7 +57,8 @@ class HeroInfo(models.Model):
     hname = models.CharField(max_length=20)
     hgender = models.BooleanField(default=False)
     hcomment = models.CharField(max_length=100)  # 拥有什么技能
-    hbook = models.ForeignKey('BookInfo', on_delete=models.CASCADE, db_constraint=False) # 关联图书，级联删除，不创建外键约束
+    # 关联图书，级联删除，不创建外键约束
+    hbook = models.ForeignKey('BookInfo', on_delete=models.CASCADE, db_constraint=False)
     # 删除标记
     isDelete = models.BooleanField(default=False)
 
