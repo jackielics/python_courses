@@ -7,7 +7,7 @@ from booktest.models import BookInfo, HeroInfo,Areas,PicTest
 class BookInfoAdmin(admin.ModelAdmin): 
     # 继承admin.ModelAdmin，自定义管理类，可以在管理页面显示自定义的内容
     list_display = ['id', 'btitle', 'bpub_date','bread','bcomment'] # 指定显示的字段
-
+    
 
 class HeroInfoAdmin(admin.ModelAdmin):
     list_display = ['id', 'hname', 'hgender', 'hcomment']
