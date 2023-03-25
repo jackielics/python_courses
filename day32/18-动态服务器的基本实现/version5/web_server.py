@@ -77,7 +77,7 @@ class WSGIServer(object):
             env = dict()
             #浏览器请求的url添加到env中
             env['PATH_INFO'] = file_name
-            #传入回调函数给application
+            # 传入回调函数给application
             body = self.app(env, self.set_response_header)
             # 解析头部
             header = "HTTP/1.1 %s\r\n" % self.status
