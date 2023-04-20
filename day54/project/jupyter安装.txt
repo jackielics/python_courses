@@ -1,0 +1,1 @@
+windows中的cmd中输入  pip install jupyter即可
